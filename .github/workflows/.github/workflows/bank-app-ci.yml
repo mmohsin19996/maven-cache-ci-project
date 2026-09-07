@@ -1,0 +1,30 @@
+name: Banking App DevSecOps Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Step 1 & 2 - Build & Run Unit Tests
+      run: mvn clean package
+
+    - name: Step 6 - Build Docker Image
+      run: |
+        docker build -t banking-app:latest .
+        echo "Docker image built successfully!"
